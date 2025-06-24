@@ -1,15 +1,18 @@
 # Build Automated, Tailored Marketing Dashboards for Optimized Marketing Spend 
 
+![](images/screenshot.png)
+
 ## End-to-end workflow with Posit Team, May 2024
 
 ---
 
-Welcome to the GitHub repository for the slides showcased in Posit's "End-to-End Workflow with Posit Team" webinar in June 2025. See them on [Posit Connect Cloud].
+Welcome to the GitHub repository for the slides showcased in Posit's "End-to-End Workflow with Posit Team" webinar in June 2025.
 
 ## Demo Resources
 
-* [Example app](https://pub.current.posit.team/public/marketing-demo/)
-* [Example app GitHub repo](https://github.com/posit-marketing/marketing-dashboard)
+* [Link to slides](https://ivelasq-2025-06-25-marketing-demo.share.connect.posit.cloud/)
+* [Marketing dashboard](https://pub.current.posit.team/public/marketing-demo/)
+* [Marketing dashboard GitHub Repo](https://github.com/posit-marketing/marketing-dashboard)
 
 ## Workflow Resources
 
