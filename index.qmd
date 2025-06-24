@@ -1,0 +1,527 @@
+---
+title: "Build Automated, Tailored Marketing Dashboards for Optimized Marketing Spend"
+subtitle: "End-to-end workflows with Posit Team"
+author: "Isabella Velásquez"
+format:
+  revealjs:
+    theme: [default, style.scss]
+---
+
+## What You'll Learn Today
+
+:::: {.columns}
+
+::: {.column width="50%"}
+[Automating]{.box-span-orange}
+:::
+
+::: {.column width="50%"}
+[Tailoring]{.box-span-purple}
+:::
+
+::::
+
+![](images/shiny.png){fig-align="center"}
+
+::: notes
+
+Good morning, everyone! My name is Isabella Velásquez, and I'm excited to talk to you today about something I think many of us struggle with: getting timely, accurate, and truly useful marketing insights.
+
+Today, we're going to dive into two key areas. First, **automation**. We'll look at how we can move away from those tedious, manual data tasks that are not only time-consuming but also prone to errors. Our goal is to transform that into a fully automated lead performance dashboard, powered by Shiny. This automation also involves integrating all your diverse marketing data sources – think CRM, social media, events – into one cohesive view.
+
+Second, we'll focus on **tailoring**. It's not enough to just have data; it needs to answer the right questions for the right people. We'll explore how to build marketing KPI dashboards that are custom-fit to leadership's specific needs, helping them make strategic decisions. And we'll even touch on how to provide flexible functionality within these dashboards, from pre-selected insights directly derived from your data to even implementing an exciting LLM-powered analytics option for deeper, conversational queries.
+:::
+
+# The Cost of Manual Data Processing
+
+##
+
+![](images/old-workflow.png)
+
+::: notes
+Let's kick things off by looking at a scenario I'm sure many of you can relate to. This image depicts a common "old workflow" in marketing analytics. It's often characterized by manual data exports, copy-pasting into spreadsheets, endless VLOOKUPs, and late nights trying to reconcile numbers.
+:::
+
+##
+
+![](images/1.png)
+
+::: notes
+Here we see someone deeply engrossed in a spreadsheet, likely compiling weekly or monthly reports. This is Isabella. She's tasked with pulling lead performance data. Imagine she's downloading CSVs from Salesforce, Facebook Ads, LinkedIn, and then manually combining all of this information. This image highlights the sheer volume of data she's trying to wrangle.
+:::
+
+##
+
+![](images/2.png)
+
+::: notes
+She’s spending her valuable time as a highly-skilled analyst on what often amounts to data janitorial work. Now, I want you to think for a moment: What strategic tasks are being missed while Isabella is stuck in Excel? What else could she be doing if this wasn't her primary focus?
+:::
+
+## { background-image="images/stressed.png"}
+
+::: incremental
+
+* Human error
+* Single point of failure
+* Leadership frustration
+* Delayed and stale insights
+
+:::
+
+::: notes
+This manual process, while seemingly just tedious and redundant, actually presents a host of critical issues.
+
+First, **human error**. Typos, formula errors, broken links in spreadsheets—these are incredibly common and can silently undermine the accuracy of your reports.
+
+Second, it creates a **single point of failure**. What happens when Isabella is out sick, on vacation, or moves to another role?
+
+Third, it leads to **leadership frustration**. When stakeholders don't get the timely, accurate, and relevant insights they need, they become frustrated. They might start making decisions based on intuition rather than data, or worse, use delayed and stale insights that are no longer reflective of the current market.
+
+And finally, this all results in **delayed and stale insights**. By the time the data is compiled, cleaned, and presented, the opportunity to act on it might have passed. 
+:::
+
+# Moving from Reactive to Proactive with Posit Tools {auto-animate=true}
+
+::: notes
+So, how do we move beyond this reactive, manual reporting to a proactive, data-driven decision-making environment? The answer lies in leveraging the **Posit Team** suite of tools, which are designed for end-to-end data science workflows.
+:::
+
+## { background-image="images/new-workflow-general.png"}
+
+::: notes
+Let me quickly introduce the core components we'll be discussing today:
+
+* **Posit Connect:** This is your central hub. Think of it as the publishing, scheduling, and secure sharing platform for all your data products – be it Shiny and Streamlit apps, Quarto reports, or APIs. It handles the automation and distribution.
+* **Posit Workbench:** This is the integrated development environment, or IDE, for analysts and data scientists. It provides a consistent environment whether you prefer RStudio, Jupyter, Positron, or VS Code. This is where your code lives, where you build your models, and where you develop your applications.
+* **Quarto:** This is a fantastic open-source publishing system that allows you to create dynamic, reproducible, and narrative-rich documents. We'll see how Quarto can script your data extraction, transformation, and loading (ETL) steps, ensuring transparency and consistency.
+* And finally, **Shiny:** This is the magic behind interactive dashboards. It allows you to transform your R or Python code into beautiful, user-friendly web applications without needing to be a web developer.
+
+Together, these tools create a powerful ecosystem to solve the challenges we just discussed.
+:::
+
+# Laying the Foundation
+
+## {auto-animate=true}
+
+[Posit Tools]{.box-span-red}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+[Automating]{.box-span-orange}
+:::
+
+::: {.column width="50%"}
+[Tailoring]{.box-span-purple}
+:::
+
+::::
+
+::: notes
+As we lay the foundation for optimizing marketing spend, we're building on two pillars: **automating** our data processes and **tailoring** our insights.
+:::
+
+## {auto-animate=true}
+
+[Foundational Elements for Success]{.box-span-blue}
+
+[Posit Tools]{.box-span-red}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+[Automating]{.box-span-orange}
+:::
+
+::: {.column width="50%"}
+[Tailoring]{.box-span-purple}
+:::
+
+::::
+
+::: notes
+However, before we dive into the exciting world of Posit tools and the technical aspects of automation and tailoring, there are three critical foundational steps that are often overlooked but are absolutely essential for success: **knowing your audience, knowing your data, and knowing your tools.** You can have the best tools in the world, but without these foundational understandings, your efforts might fall short.
+:::
+
+## {auto-animate=true}
+
+[Knowing Your Audience]{.box-span-blue}
+
+::: incremental
+
+* **_What_** they want: Key metrics, specific insights.
+* **_How_** they want it: Format, level of detail.
+* **_How often_** they want it: Frequency of updates.
+* **_Why_** they want it: The decisions they need to make.
+
+:::
+
+::: notes
+First, **knowing your audience** is paramount. You need to understand:
+
+* **What** specific metrics, KPIs, or insights do they *truly* care about? Don't just give them everything; give them what's actionable.
+* **How** do they prefer to consume information? Is it a high-level summary, a drill-down dashboard, or a static report? What level of detail do they need?
+* **How often** do they need updates? Daily, weekly, monthly, or on-demand? Delivering too frequently can lead to alert fatigue, too infrequently can mean stale insights.
+* And most importantly, **why** do they want this data? What questions are they trying to answer? What decisions are they trying to make? Understanding their *why* allows you to frame the data in a way that directly supports their objectives.
+
+Often, the 'why' is to answer specific questions so they can make informed decisions. You could get started without this information, and often people do out of necessity. However, you may find yourself going back to get more or different data, or having to edit your dashboard significantly, if these needs are unclear or evolve. Investing time here upfront saves a lot of rework later.
+:::
+
+## {auto-animate=true}
+
+[Knowing Your Data]{.box-span-blue}
+
+::: incremental
+
+* **_What_** data you have: Sources, access, security.
+* **_How often_** your data is updated: Refresh cycles.
+* **_When_** does your data change: Volatility and consistency.
+* **_What issues_** your data has: Gaps, inconsistencies, biases.
+* **_How_** your data ties to the audience's questions: Relevance and actionability.
+
+:::
+
+::: notes
+Next, you need a deep understanding of **knowing your data**. This isn't just about knowing where it lives, but its characteristics:
+
+* **What data do you have?** From which sources? Do you have access to them? Are you allowed to use the data for these purposes?
+* **How often is your data updated?** Is it real-time, daily, weekly? This impacts the freshness of your insights.
+* **When does your data change?** Is it consistent, or are there unexpected shifts or data dumps? Understanding data volatility is key.
+* **What issues does your data have?** Are there missing values? Inconsistencies? Biases? Duplicates? You need to identify these early so you can address them in your ETL process.
+* And finally, **how does your data tie back to your audience's questions?** Is the data you have actually capable of answering their "why"? This ensures relevance and actionability.
+:::
+
+## {auto-animate=true}
+
+[Knowing Your Resources]{.box-span-blue}
+
+::: incremental
+
+* What **tools/resources** do you have at your disposal?
+* What is your **timeframe** for getting something delivered?
+* Are you working with other analysts and do you need to **collaborate**?
+* How can you **get feedback** and incorporate it into your solution?
+
+:::
+
+::: notes
+Lastly, **knowing your tools** is about understanding your capabilities and constraints.
+
+* What **tool resources** do you already have available within your organization? Are they cloud-based, on-premise? Do you have access to Posit Team, for example? What are the specific packages or libraries available?
+* What is your **timeframe** for getting something delivered? Are you building a quick prototype or a robust production system? This influences your approach and complexity.
+* Are you working with other analysts and do you need to collaborate? This is a crucial question. If you're working in a team, your setup needs to support version control, shared environments, and seamless collaboration, which tools like Posit Workbench are designed for. A solo project has different considerations than a team-based one.
+* And critically, how can you **get feedback and incorporate it** into your solution? Dashboards aren't built in a vacuum. Setting up a process for iterative feedback ensures your solution evolves to meet changing needs.
+:::
+
+# Marketing Scenario
+
+::: notes
+To make this tangible, let's consider a common marketing scenario. We'll be focusing on **lead performance reporting**. Before we dive into the specifics, let's quickly align on a few key marketing terms we'll be using throughout the session.
+:::
+
+## Key Marketing Terms
+
+* **Leads:** A potential customer or someone who has shown interest in a product or service.
+* **Lead score:** A rating based on how likely a lead is to become a paying customer.
+* **Conversion:** When a lead (or anyone) takes a desired action that moves them further down the path to becoming a customer.
+* **Opportunity rate:** A metric that measures how well we convert qualified potential deals into paying customers.
+
+::: notes
+* **Leads:** These are simply potential customers, individuals or companies who have shown some level of interest in your product or service.
+* **Lead Score:** This is a numerical rating assigned to a lead based on their engagement and demographic information, indicating how likely they are to become a paying customer. Higher score means higher likelihood.
+* **Conversion:** This is when a lead (or any prospect) takes a desired action that moves them further down the sales funnel, for example, signing up for a demo, downloading an e-book, or making a purchase.
+* **Opportunity Rate:** This is a key metric that measures how effectively we turn qualified potential deals—those leads who are ready for sales engagement—into actual paying customers.
+:::
+
+## {auto-animate=true .smaller}
+
+[Today's Audience: Terry, Chief Marketing Officer]{.box-span-blue}
+
+**Needs:** Concise summaries, trend analysis, top-line KPIs, strategic insights.
+
+**Delivery:** Daily email alerts (for critical shifts), weekly executive summary.
+
+**Key Questions:**
+
+* Where is our marketing spend having the most impact in terms of leads and revenue generated?
+* What's our cost per lead across different channels?
+* Are we meeting our quarterly/annual lead generation and pipeline contribution goals?
+
+::: notes
+Now, let's meet our key stakeholders in this scenario, aligning with the "Knowing Your Audience" principle.
+
+First up, **Terry, the Chief Marketing Officer (CMO)**. Terry operates at a strategic level.
+* Their needs are for **concise summaries, trend analysis, and top-line KPIs**. They doesn't need to see every single lead; they needs to understand the big picture and strategic insights.
+* How he wants it delivered: **Daily email alerts** for any critical shifts, and a **weekly executive summary** to prepare for leadership meetings.
+* His key questions revolve around overall performance and ROI: "Where is our marketing spend having the most impact in terms of leads and revenue generated? What's our cost per lead across different channels? Are we meeting our quarterly/annual lead generation and pipeline contribution goals?"
+:::
+
+## {auto-animate=true .smaller}
+
+[Today's Audience: Taylor, Sr. Campaign Marketing Manager]{.box-span-blue}
+
+**Needs:** Drill-down visualizations, campaign-specific performance, comparative analysis, content effectiveness.
+
+**Delivery:** Weekly (for campaign optimization), ad-hoc (for deep dives).
+
+**Key Questions:**
+
+* How many leads did our LinkedIn campaign generate last month, and what was its conversion rate?
+* Are there specific stages in the lead journey where my campaigns could be more effective?
+* Should we reallocate budget from social media campaign A to event campaign B based on recent lead quality?
+
+::: notes
+Next, we have **Taylor, the Senior Campaign Marketing Manager**. Taylor is much more operational.
+* Their needs are for **drill-down visualizations**, the ability to see **campaign-specific performance**, perform **comparative analysis** between different campaigns, and evaluate **specific content effectiveness**.
+* How they wants it delivered: **Weekly updates** for campaign optimization, and **ad-hoc** capabilities for deep dives when they're troubleshooting or planning.
+* Their questions are much more granular: "How many leads did our LinkedIn campaign generate last month, and what was its conversion rate? Are there specific stages in the lead journey where my campaigns could be more effective? Should we reallocate budget from social media campaign A to event campaign B based on recent lead quality?"
+:::
+
+## {auto-animate=true .smaller}
+
+[Today's Audience: Alex, VP of Sales]{.box-span-blue}
+
+**Needs:** Focus on sales-ready leads, conversion rates to opportunities, sales pipeline value from marketing sources.
+
+**Delivery:** Daily (for lead assignments/prioritization), weekly (for sales forecasting), ad-hoc (for specific channel reviews).
+
+**Key Questions:**
+
+* What's the average lead score of leads passed to us?
+* Which marketing channels are producing the highest quality leads that convert into opportunities?
+* Which industries are leading to the highest conversion?
+
+::: notes
+Finally, we consider **Alex, the VP of Sales**. Alex's perspective is all about sales readiness and revenue generation from marketing efforts.
+* Their needs are focused on **sales-ready leads**, **conversion rates to opportunities**, and the **sales pipeline value generated from marketing sources**. They cares about the *quality* of leads, not just the quantity.
+* How they wants it delivered: **Daily updates** for lead assignments and prioritization, **weekly updates** for sales forecasting, and **ad-hoc** reviews for specific channel performance.
+* Their questions reflect this focus: "What's the average lead score of leads passed to us? Which marketing channels are producing the highest quality leads that convert into opportunities? How many new opportunities were generated from marketing leads this week/month?"
+
+As you can see, these three stakeholders have very different needs, frequencies, and questions, which highlights the challenge of providing tailored insights.
+:::
+
+## {auto-animate=true}
+
+[Today's Data Sources]{.box-span-blue}
+
+::: incremental
+
+* **Salesforce** lead data containing names, company, company size, etc., stored in a **Snowflake database**.
+* **Lead quality** metrics, stored in an API
+* **LinkedIn/TikTok/Facebook/YouTube** and other platform performance data, accessible via **individual CSVs**.
+
+:::
+
+::: notes
+Now, let's look at the data sources we'll be working with in this scenario, aligning with the "Knowing Your Data" principle.
+
+* Our core lead data, including details like names, companies, and company sizes, resides in **Salesforce**, which is integrated with a **Snowflake database**. This is our primary CRM data.
+* Our lead quality data is currently stored in **an application programming interface (API)**.
+* For our social media campaigns, we have performance data from platforms like **LinkedIn, TikTok, Facebook, and YouTube**. This data is accessible via **each platform's CSV**.
+
+This is a very common scenario: data isn't in one neat place. It's scattered across different systems and formats, posing a significant integration challenge that automation can solve.
+:::
+
+## {auto-animate=true}
+
+[Today's Resources]{.box-span-blue}
+
+* Posit Team (Workbench, Connect), Anthropic Claude 4 Sonnet, open-source packages
+* Time is up!
+* Working alone
+* Getting feedback through conversations and the Connect API
+
+# Posit Automation Workflow for Lead Performance Reporting
+
+::: notes
+Now that we understand the problem and the foundational elements, let's talk about the solution: the new, optimized **Posit Automation Workflow**.
+:::
+
+## {auto-animate=true background-image="images/new-workflow.png"}
+
+::: notes
+
+Here, you see our target workflow. It’s a complete transformation from the manual process. Data flows directly from its sources – Salesforce, various social media APIs, and even spreadsheets – into a centralized, automated pipeline.
+
+A key concept here is **ETL**: **Extract, Transform, Load**.
+* **Extract:** This is about pulling raw data from all those disparate sources.
+* **Transform:** This is the crucial step where we clean the data, handle missing values, standardize formats, combine different datasets, and calculate new metrics like lead scores or conversion rates. This is where the magic happens to make raw data *actionable*.
+* **Load:** This is where we deliver the processed, clean data to its final destination, whether that's a database, a data frame, or directly into a dashboard.
+
+This entire process, from extraction to loading, will be automated and orchestrated using Posit tools.
+:::
+
+## Step 1: Connecting Your Data Silos {.smaller}
+
+[Challenge: Data scattered across Salesforce (CRM), social media platform APIs, and event registration systems.]{.box-span-red}
+
+. . .
+
+[Solution: Leverage **open-source packages** and **Posit Workbench's secure credential management** for direct data connections.]{.box-span-green}
+
+::: notes
+Our first step in automating is **connecting your data silos**.
+
+The challenge, as we saw with Isabella's scenario, is that data is scattered across Salesforce (your CRM), various social media platform APIs, and even simple Google Sheets for events. Trying to manually download and combine this is a nightmare.
+
+The solution is to leverage **open-source packages** available in R and Python – packages specifically designed to connect to databases (like `odbc` or `DBI` for Snowflake), to requests and httr2 for connecting to APIs, and to securely authenticate with these services.
+
+Crucially, **Posit Workbench provides secure credential management**. This means you don't hardcode sensitive API keys or database passwords into your scripts. Workbench allows you to store and access these credentials securely, making your code safer and more reproducible.
+
+Within Posit Workbench, my development environment, I'm going to choose Positron as my editor of choice.
+
+One significant advantage of Posit Workbench on Snowflake is the elimination of credential management. I can securely sign into Snowflake via Single Sign-On (SSO), granting me appropriate access to our data.
+
+I'm now opening my ETL Quarto document. The setup chunk at the top handles library imports and configures the document for deployment to Connect. For data extraction from Salesforce, I'm using the Snowflake connector. While various tools exist in R and Python for database connections, I prefer these languages over SQL. The extracted data is then processed with Polars.
+
+For API integration, I leverage Python's requests library to ingest and transform data into a Polars DataFrame. R users might find httr2 a powerful alternative for this task. 
+
+Finally, for CSV files, I simply read them from a designated folder using a custom function. This direct approach can be particularly useful when CSVs are stored behind logins or are otherwise challenging to access.
+
+:::
+
+## Step 2: From Raw Data to Actionable Data {.smaller}
+
+[Challenge: Transforming raw, often messy, and disparate data into a clean, structured, and actionable format suitable for a dashboard.]{.box-span-red}
+
+. . .
+
+[Solution: Automate a **Quarto document** for the **Extract-Transform-Load (ETL)** process on **Posit Connect**. Use **pointblank** + **Workflow Execution Monitoring** to ensure smooth operations.]{.box-span-green}
+
+::: notes
+Step 2 is where we turn that raw, messy data into something truly actionable.
+ 
+The challenge is significant: you're dealing with inconsistent formats, missing values, duplicates, and data that simply isn't structured for analysis. You need to transform it into a clean, unified, and dashboard-ready format.
+
+Our solution is to automate this entire ETL process using a **Quarto document** published on **Posit Connect**.
+This pulls from various sources, cleans and standardizes data, combines disparate datasets, and summarizes for meaningful metrics.
+
+* Within this Quarto document, you'll write the code (R or Python) to **extract** data from all those connected sources.
+* Then, you'll implement the **transformation** steps: this includes data cleaning (handling NAs, outliers), standardization (consistent date formats, naming conventions), combining data from different sources (joining Salesforce leads with campaign data), and summarizing data to derive meaningful metrics (like cost per lead, conversion rates).
+* Finally, you'll **load** this processed data into a format that your Shiny dashboard can easily consume.
+
+Posit Connect is vital here because it allows you to **schedule** this Quarto document to run automatically at a set frequency – daily, hourly, whatever you need. Furthermore, Posit Connect offers **Workflow Execution Monitoring**. This means you can track if your ETL jobs are running successfully, how long they take, and if there are any failures, allowing you to quickly troubleshoot. This provides peace of mind that your data is always fresh and accurate.
+
+(Technical Walkthrough Notes - To be covered in demo)
+* **Creating a Quarto dashboard for the ETL:** Briefly show a Quarto document structure.
+* **Issues with joining data:** Common pitfalls like missing keys, data type mismatches, and strategies to handle them.
+* **Unit tests:** Emphasize writing small tests for critical transformation steps to ensure data integrity.
+* **Data validation checks:** Implementing checks for expected ranges, completeness, and consistency after transformation.
+* **Workflow Execution Monitoring:** Show Posit Connect's logs, execution history, and how to configure email/Slack alerts for job failures or data anomalies.
+* **Saving processed data into a database:** Discuss options:
+    * **Production data belongs in a database:** Ideal scenario, explain drivers (e.g., `RPostgres`, `pyodbc`) and packages (e.g., `{DBI}` in R, `SQLAlchemy` in Python).
+    * **What if you don't have a database?** Depending on data size:
+        * Save as an `.RDS` (R) or `pickle` (Python) file in a central, accessible location.
+        * Save as a `pin` using the `pins` package, which abstracts storage.
+        * Save in a local `DuckDB` database for analytical queries without a full server.
+* **Scheduling ETL in Posit Connect:** Demonstrate how to set up recurring schedules for the Quarto document on Connect.
+:::
+
+## Step 3: Building the Tailored Dashboard with Shiny {.smaller}
+
+[Challenge: Designing and implementing an interactive dashboard that effectively meets the diverse and often conflicting needs of various stakeholders, while simultaneously reducing data overload and clarifying complex insights.]{.box-span-red}
+
+. . .
+
+[Solution: **Shiny** empowers you to create dynamic and user-centric dashboards!]{.box-span-green}
+
+::: notes
+Step 3 is where all that cleaned, automated data comes to life: **Building the Tailored Dashboard with Shiny**.
+
+The challenge here is significant. We have Terry the CMO, Taylor the Campaign Manager, and Alex the VP of Sales, all with distinct needs and questions. Building one-size-fits-all reports often leads to data overload for some and insufficient detail for others. The goal is to clarify complex insights and present them in a user-friendly way.
+
+The solution is **Shiny!** Shiny, whether you're using it with R or Python, is incredibly powerful for creating interactive web applications directly from your analytical code. You don't need to be a full-stack web developer to build professional-grade dashboards.
+:::
+
+## Shiny Enables...
+
+* **Drill-downs:** Allowing leadership to explore specific campaigns, lead sources, or timeframes.
+* **Dynamic Data Visualizations:** Charts and graphs that respond to user selections.
+* **Flexible User Interfaces:** Designing intuitive layouts that simplify complex information.
+* **LLM Integration:** Adding powerful AI-driven analytics capabilities.
+
+::: notes
+Shiny enables us to address the tailoring challenge directly:
+
+* **Drill-downs:** This is crucial for satisfying both Terry's top-line needs and Taylor's desire for campaign specifics. A CMO might see an overall trend and then, with a click, drill down to see the performance of a specific channel or campaign.
+* **Dynamic Data Visualizations:** Your charts and graphs aren't static images. They respond to user selections, filters, and date ranges in real time, making the data exploration intuitive and engaging.
+* **Flexible User Interfaces:** Shiny allows you to design layouts that simplify complex information. You can create different tabs for different stakeholders or provide various input controls to customize the view, catering to diverse preferences.
+* And a cutting-edge feature, **LLM Integration**. Imagine your users being able to type a question in natural language – "What was our best performing campaign in Q1?" – and the dashboard, powered by an LLM, generates the answer or relevant visualization directly. This is where advanced tailoring meets AI.
+
+(Technical Walkthrough Notes - To be covered in demo)
+* **How Shiny reads data:** Explain `reactive` expressions for efficiency, ensuring the dashboard only recalculates when necessary.
+* **Demonstrate drill-downs:** Show an example of summary to detail.
+* **Show dynamic filters/inputs:** Date ranges, channel selectors.
+* **LLM Integration:** Briefly discuss the concept, mentioning:
+    * **Models allowed by IT:** Stress the importance of organizational policy on using external AI models.
+    * **Cost per query:** Acknowledge potential costs associated with API calls to LLMs.
+    * **Accountability, policy, and ethics:** Briefly touch on the need for responsible AI usage, data privacy, and avoiding "hallucinations" from LLMs.
+:::
+
+## Step 4: Automated Scheduling & Secure Delivery {.smaller}
+
+[Challenge: Ensuring consistent, timely, and secure delivery of automated reports and dashboards to the relevant stakeholders.]{.box-span-red}
+
+. . .
+
+[Solution: Configure **Posit Connect** to send direct links to the interactive Shiny dashboard (or HTML reports from Quarto) on a schedule. For example, deliver to the Marketing Leadership team every Monday morning at 8:00 AM, two hours before their meeting, and send tailored emails to each individual stakeholder.]{.box-span-green}
+
+::: notes
+Step 4 is all about ensuring your hard work actually gets to the right people, at the right time, securely: **Automated Scheduling & Secure Delivery**.
+
+The challenge is maintaining consistent, timely delivery without manual intervention. If Isabella is still hitting "send" on emails, we haven't fully automated. Plus, how do we ensure these sensitive insights are only seen by authorized individuals?
+
+The solution lies entirely with **Posit Connect**. Connect is not just for deploying your Shiny apps; it's also a powerful scheduling and distribution platform.
+
+You can configure Connect to:
+* Send **direct links to the interactive Shiny dashboard** to the Marketing Leadership team every Monday morning, say, at 8:00 AM, giving them two hours to review before their weekly meeting.
+* You can also configure **custom emails** for specific stakeholders, sending tailored HTML reports from Quarto documents or even static image snapshots from your Shiny app on a precise schedule.
+* Crucially, Posit Connect handles all the **authentication and authorization**. Your stakeholders log in, and they only see the content they're permitted to access, ensuring data security and compliance. This eliminates emailing sensitive spreadsheets and ensures everyone is looking at the same, live data.
+:::
+
+## Step 5: Continuous Improvement {.smaller}
+
+[Challenge: Ensuring the long-term relevance, effectiveness, and adaptability of the automated data product by establishing robust mechanisms for ongoing refinement and safely extending data access to advanced users.]{.box-span-red}
+
+. . .
+
+[Solution: Access **usage data** via the **Posit Connect API** to identify possible issues or bottlenecks. This data-driven feedback loop allows for continuous optimization of your dashboards and workflows.]{.box-span-green}
+
+::: notes
+Our final step, often overlooked, is **Continuous Improvement**.
+
+The challenge here is ensuring that your automated data product remains relevant and effective over time. Needs evolve, data sources change, and new questions arise. How do you know if your dashboard is actually being used, and if so, how? How do you safely empower advanced users?
+
+The solution is to leverage the **Posit Connect API** to access **usage data**. Connect logs every time your content is viewed, who views it, and for how long. This data allows you to:
+* **Identify possible issues or bottlenecks:** Are users abandoning the dashboard quickly? Are certain tabs never clicked? This can indicate usability issues or irrelevance.
+* **Measure adoption:** See how many people are regularly using the dashboard.
+* **Understand peak usage times:** Optimize scheduling for when users are most active.
+* Beyond usage data, Connect also allows for **secure collaboration**. You can safely extend access to advanced users, allowing them to download the underlying data (if permitted) or even fork your Quarto ETL script or Shiny app for their own custom analyses, fostering a data-driven culture.
+
+This data-driven feedback loop allows for the continuous optimization of your dashboards and workflows, ensuring they always meet the evolving needs of your business.
+:::
+
+# Happy Leadership, Happy Analyst
+
+## Picture a New Scenario
+
+* **Isabella can reclaim 3 hours/week**, totaling over 100 hours/year.
+* **Data-Driven Confidence**, to make truly informed budget allocation decisions.
+* **Leverage the latest tools**, including AI, to stay ahead in marketing intelligence.
+* Transition from a fragile, manual process to a **robust, automated, and scalable solution**.
+
+::: notes
+So, what does all of this mean for Isabella and for your organization?
+
+Picture this new scenario:
+* Instead of spending 3 hours a week wrestling with spreadsheets, **Isabella can reclaim that time**. That's over 100 hours a year – time that can be reinvested into higher-value activities.
+* She fundamentally shifts her role from being a **data janitor to a strategic advisor**. She's now freed up to focus on what truly drives business value: conducting A/B tests, optimizing campaigns in real-time, building predictive models, and proactively identifying new opportunities.
+* And for the business, you benefit from **eliminated human error**, guaranteeing on-time, accurate reports that stakeholders can trust.
+
+Leadership p can drill down into the data, ask their specific questions – even leveraging cutting-edge LLM capabilities – and make **truly informed budget allocation decisions** based on reliable insights, rather than gut feeling or outdated numbers.
+* They get **on-demand, tailored insights**, whenever and wherever needed, directly to their devices. No more waiting, no more emailing back and forth.
+Ultimately, by implementing these end-to-end workflows with Posit Team, you are **modernizing your marketing operations**.
+
+Thank you. I'm happy to take any questions now.
+:::

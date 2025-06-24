@@ -1,0 +1,56 @@
+/*-- scss:defaults --*/
+
+.box-span-orange {
+  background-color: #EDCCBF;
+  border-radius: 8px;
+  padding: 36px 46px;
+  margin: 10px 10px;
+  display: block;
+  box-decoration-break: clone;
+  text-align: center;
+}
+
+.box-span-purple {
+  background-color: #D9C4CC;
+  border-radius: 8px;
+  padding: 36px 46px;
+  margin: 10px 10px;
+  display: block;
+  box-decoration-break: clone;
+  text-align: center;
+}
+
+.box-span-green {
+  background-color: #CFD9C7;
+  border-radius: 8px;
+  padding: 36px 46px;
+  margin: 10px 10px;
+  display: block;
+  box-decoration-break: clone;
+  text-align: center;
+}
+
+.box-span-blue {
+  background-color: #C2D9D9;
+  border-radius: 8px;
+  padding: 36px 46px;
+  margin: 10px 10px;
+  display: block;
+  box-decoration-break: clone;
+  text-align: center;
+}
+
+.box-span-red {
+  background-color: #F9A395;
+  border-radius: 8px;
+  padding: 36px 46px;
+  margin: 25px 10px;
+  display: block;
+  box-decoration-break: clone;
+  text-align: center;
+}
+
+$presentation-title-slide-text-align: left;
+.title {
+  font-size: 70px !important;
+}
