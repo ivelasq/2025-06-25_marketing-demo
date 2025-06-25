@@ -1,0 +1,103 @@
+---
+title: "Marketing Demo"
+subtitle: "Extract, Transform, Load Process -- With Errors"
+format: html
+---
+
+## Setup
+
+```{python}
+#| label: setup
+import polars as pl
+import pointblank as pb
+```
+
+## Salesforce
+
+### 📊 Data import
+
+```{python}
+#| label: salesforce-data-import
+#| eval: false
+import snowflake.connector
+con = snowflake.connector.connect(
+    connection_name="workbench",
+    warehouse="DEFAULT_WH",
+    database = "DEMOS",
+    schema = "PUBLIC"
+)
+
+cur = con.cursor()
+
+cur.execute("SELECT * FROM SALESFORCE_DAT")
+salesforce_arrow = cur.fetch_arrow_all()
+salesforce_polars = pl.from_arrow(salesforce_arrow)
+```
+
+### 🔍 Data validation analysis with Pointblank
+
+```{python}
+#| label: data-validation-pointblank
+
+salesforce_data = pl.read_csv("salesforce_leads_snowflake.csv")
+
+def log_error():
+    """Custom action to log validation errors"""
+    metadata = pb.get_action_metadata()
+    print(f"❌  ERROR: Critical validation failure in step '{metadata['step']}'!")
+
+def validate_salesforce_data(
+    data: pl.DataFrame,
+    tbl_name: str = "Salesforce",
+    label: str = "Lead Data",
+) -> pb.Validate:
+    validation = (
+        pb.Validate(
+            data=data,
+            tbl_name=tbl_name,
+            label=f"{tbl_name} {label}",
+            thresholds=pb.Thresholds(0.01, 0.02, 0.05),
+            actions=pb.Actions(error=log_error),
+            brief=True,
+        )
+        .col_vals_not_null(
+          columns=pb.ends_with("_id")
+       )
+        .col_vals_not_null(
+          columns=pb.ends_with("_name")
+       )
+       .col_vals_not_null(
+        columns="company"
+       )
+        .col_vals_regex(
+          columns="email",
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+       )
+        .col_vals_between(
+            columns=["opportunity_value", "lead_score"], left=0, right=100
+        )
+        .rows_distinct(columns_subset="lead_id")
+            .col_vals_gt(
+            columns=["annual_revenue", "employees"], value=0
+        )
+       .col_vals_in_set(
+          columns="lead_source",
+          set=["Web", "Event", "Social Media"]
+       )
+        # Removed the redundant .col_vals_in_set for lead_source
+        .interrogate()
+    )
+    return validation
+
+validate_salesforce_data(data=salesforce_data)
+```
+
+```{python}
+#| label: stop-render-error
+validation_result = validate_salesforce_data(data=salesforce_data)
+
+print("Above error threshold?", validation_result.above_threshold(level="error"))
+if validation_result.above_threshold(level="error"):
+    print("RAISING ERROR NOW!")
+    raise ValueError("VALIDATION FAILED - STOPPING RENDER!")
+```

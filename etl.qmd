@@ -1,0 +1,199 @@
+---
+title: "Marketing Dashboard"
+subtitle: "Extract, Transform, Load Process"
+format: html
+---
+
+## 🏗️ Setup
+
+```{python}
+#| label: setup
+import polars as pl
+import pointblank as pb
+import requests
+import io
+```
+
+## ⬇️ Extract
+
+### Salesforce Data from a Snowflake Database
+
+```{python}
+#| label: salesforce-data-import
+#| eval: false
+import snowflake.connector
+con = snowflake.connector.connect(
+    connection_name="workbench",
+    warehouse="DEFAULT_WH",
+    database = "DEMOS",
+    schema = "PUBLIC"
+)
+
+cur = con.cursor()
+
+cur.execute("SELECT * FROM SALESFORCE_DAT")
+salesforce_arrow = cur.fetch_arrow_all()
+salesforce_polars = pl.from_arrow(salesforce_arrow)
+
+salesforce_data = salesforce_polars.select([
+    pl.col(col).alias(col.lower()) for col in salesforce_polars.columns
+])
+```
+
+### Lead Quality Data from an API
+
+```{python}
+url = "https://pub.demo.posit.team/public/lead-quality-metrics-api/lead_quality_metrics"
+
+response = requests.get(url)
+content = response.text
+
+lead_quality_data = pl.read_json(io.StringIO(content))
+```
+
+### Platform Data from CSVs
+
+```{python}
+csv_files = ["facebook_performance.csv", "google_ads_performance.csv", "events_performance.csv" "linkedin_performance.csv", "podcasts_performance.csv", "tiktok_performance.csv", "webinars_performance.csv"]
+
+platform_performance_data = pl.read_csv(csv_files)
+```
+
+## 🔍 Data validation analysis with Pointblank
+
+### Salesforce
+
+```{python}
+#| label: data-validation-pointblank
+#| eval: false
+
+salesforce_data = pl.read_csv("salesforce_leads_snowflake.csv")
+
+def log_error():
+    """Custom action to log validation errors"""
+    metadata = pb.get_action_metadata()
+    print(f"❌  ERROR: Critical validation failure in step '{metadata['step']}'!")
+
+def validate_salesforce_data(
+    data: pl.DataFrame,
+    tbl_name: str = "Salesforce",
+    label: str = "Lead Data",
+) -> pb.Validate:
+    validation = (
+        pb.Validate(
+            data=data,
+            tbl_name=tbl_name,
+            label=f"{tbl_name} {label}",
+            thresholds=pb.Thresholds(0.01, 0.02, 0.05),
+            actions=pb.Actions(error=log_error),
+            brief=True,
+        )
+        .col_vals_not_null(
+          columns=pb.ends_with("_id")
+       )
+        .col_vals_not_null(
+          columns=pb.ends_with("_name")
+       )
+       .col_vals_not_null(
+        columns="company"
+       )
+        .col_vals_regex(
+          columns="email",
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+       )
+        .col_vals_between(
+            columns=["opportunity_value", "lead_score"], left=0, right=100
+        )
+        .rows_distinct(columns_subset="lead_id")
+            .col_vals_gt(
+            columns=["annual_revenue", "employees"], value=0
+        )
+       .col_vals_in_set(
+          columns="lead_source",
+          set=["Web", "Event", "Social Media"]
+       )
+        # Removed the redundant .col_vals_in_set for lead_source
+        .interrogate()
+    )
+    return validation
+```
+
+## 🧹 Transform
+
+```{python}
+salesforce_data_clean = salesforce_data.clone()
+
+# Remove rows with missing lead_id
+salesforce_data_clean = salesforce_data_clean.filter(pl.col("lead_id").is_not_null())
+
+# Fill missing first_name with "Unknown" and missing company with "Unknown Company"
+salesforce_data_clean = salesforce_data_clean.with_columns(
+    pl.col("first_name").fill_null("Unknown"),
+    pl.col("last_name").fill_null("Unknown"),
+    pl.col("company").fill_null("Unknown Company"),
+    pl.col("opportunity_value").fill_null(0)
+)
+
+#  Fix invalid email addresses
+salesforce_data_clean = salesforce_data_clean.with_columns(
+    pl.when(
+        ~pl.col("email").str.contains(
+            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        )
+    )
+    .then(pl.lit("invalid@example.com"))
+    .otherwise(pl.col("email"))
+    .alias("email")
+)
+
+# Cap lead_score to valid range (0-100)
+salesforce_data_clean = salesforce_data_clean.with_columns(pl.col("lead_score").clip(0, 100))
+
+# Cap opportunity_value to valid range (0-100)
+salesforce_data_clean = salesforce_data_clean.with_columns(pl.col("opportunity_value").clip(0, 100))
+
+# Remove duplicate lead_ids (keep first occurrence)
+salesforce_data_clean = salesforce_data_clean.unique(subset=["lead_id"], keep="first")
+
+# Fix invalid dates
+salesforce_data_clean = salesforce_data_clean.with_columns(
+    pl.when(~pl.col("created_date").str.contains(r"^\d{4}-\d{2}-\d{2}$"))
+    .then(pl.lit("2024-01-01"))  # Default date
+    .otherwise(pl.col("created_date"))
+    .alias("created_date")
+)
+
+# Ensure positive values for annual_revenue and employees
+salesforce_data_clean = salesforce_data_clean.with_columns(
+    pl.col("annual_revenue").abs(),
+    pl.col("employees").abs()
+)
+
+validate_salesforce_data(salesforce_data_clean)
+```
+
+```{python}
+#| label: stop-render-error
+validation_result = validate_salesforce_data(data=salesforce_data_clean)
+
+print("Above error threshold?", validation_result.above_threshold(level="error"))
+if validation_result.above_threshold(level="error"):
+    print("RAISING ERROR NOW!")
+    raise ValueError("VALIDATION FAILED - STOPPING RENDER!")
+```
+
+### Lead Quality and Platform Performance Data
+
+For brevity, we're going to pretend that these datasets are magically clean.
+
+## ⬆️ Load
+
+```{python}
+#| label: load-data
+salesforce_data_pd = salesforce_data_clean.to_pandas()
+lead_quality_data_pd = lead_quality_data.to_pandas()
+platform_performance_data_pd = platform_performance_data.to_pandas()
+
+table_names = ["SALESFORCE_DEMO", "LEAD_QUALITY_DEMO", "PERFORMANCE_DEMO"]
+```
+
