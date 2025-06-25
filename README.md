@@ -13,6 +13,8 @@ Welcome to the GitHub repository for the slides showcased in Posit's "End-to-End
 * [Link to slides](https://ivelasq-2025-06-25-marketing-demo.share.connect.posit.cloud/)
 * [Marketing dashboard](https://pub.current.posit.team/public/marketing-demo/)
 * [Marketing dashboard GitHub Repo](https://github.com/posit-marketing/marketing-dashboard)
+* [ETL file](etl.qmd)
+* [ETL with errors](etl-error.qmd)
 
 ## Workflow Resources
 
