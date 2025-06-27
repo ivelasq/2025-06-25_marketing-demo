@@ -2,7 +2,7 @@
 
 ![](images/screenshot.png)
 
-## End-to-end workflow with Posit Team, May 2024
+## End-to-end workflow with Posit Team, June 2025
 
 ---
 
