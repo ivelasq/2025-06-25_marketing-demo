@@ -4,9 +4,9 @@
 
 ## End-to-end workflow with Posit Team, June 2025
 
----
-
 Welcome to the GitHub repository for the slides showcased in Posit's "End-to-End Workflow with Posit Team" webinar in June 2025.
+
+[Link to Webinar Recording](https://www.youtube.com/watch?v=TL0OCJVDqtI)
 
 ## Demo Resources
 
